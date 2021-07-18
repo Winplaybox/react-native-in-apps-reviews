@@ -1,0 +1,54 @@
+apply plugin: 'com.android.library'
+
+buildscript {
+  if (project == rootProject) {
+    repositories {
+      google()
+      jcenter()
+      maven {
+        url "$projectDir/../node_modules/react-native/android"
+      }
+    }
+    dependencies {
+      classpath 'com.android.tools.build:gradle:3.6.3'
+      classpath 'com.google.gms:google-services:4.3.3'
+    }
+  }
+}
+
+
+def safeExtGet(name) {
+  rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties[name]
+}
+
+android {
+  compileSdkVersion safeExtGet('compileSdkVersion')
+  buildToolsVersion safeExtGet('buildToolsVersion')
+
+  defaultConfig {
+    minSdkVersion safeExtGet('minSdkVersion')
+    targetSdkVersion safeExtGet('targetSdkVersion')
+    versionCode 1
+    versionName "1.0"
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+    }
+  }
+  lintOptions {
+    disable 'GradleCompatible'
+  }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+}
+
+
+dependencies {
+    implementation "com.facebook.react:react-native:+"  // From node_modules
+
+    implementation "com.google.android.play:core:${safeExtGet('playCoreVersion')}"
+    implementation "com.google.android.gms:play-services-base:${safeExtGet('playServicesVersion')}"
+}
